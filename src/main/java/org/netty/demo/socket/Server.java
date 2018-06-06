@@ -14,12 +14,13 @@ public class Server {
             System.out.println("启动服务器......");
             //创建一个新的ServerSocket，用来监听指定端口上的连接请求
             ServerSocket serverSocket = new ServerSocket(8989);
+            Socket socket = null;
             while (true) {
                 try {
                     //对accept()方法的调用将被阻塞，直到一个连接创建
                     //该socket用于客户端和服务器之间的通信
                     //流对象都派生于该套接字的流对象
-                    Socket socket = serverSocket.accept();
+                    socket = serverSocket.accept();
                     InputStream inputStream = socket.getInputStream();
                     BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
                     PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
@@ -39,7 +40,7 @@ public class Server {
                 } catch (Exception e) {
                     System.out.println("Error");
                 } finally {
-                    serverSocket.close();
+                    socket.close();
                 }
             }
         } catch (IOException e) {
