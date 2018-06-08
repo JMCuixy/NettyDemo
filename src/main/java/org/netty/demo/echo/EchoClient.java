@@ -56,6 +56,10 @@ public class EchoClient {
         System.out.println("------------------------------------");
 
         new EchoClient("127.0.0.1", 9999).start();
+
+        System.out.println("------------------------------------");
+
+        new EchoClient("127.0.0.1", 9999).start();
     }
 
 

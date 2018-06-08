@@ -22,10 +22,6 @@ public class EchoServer {
         this.port = port;
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        new EchoServer(9999).start();
-    }
-
     public void start() throws InterruptedException {
         final EchoServerHandler serverHandler = new EchoServerHandler();
         //1、创建EventLoopGroup以进行事件的处理，如接受新连接以及读/写数据
@@ -39,8 +35,7 @@ public class EchoServer {
                     //4、使用指定的端口设置套接字地址
                     .localAddress(new InetSocketAddress(port))
                     //5、添加一个 EchoServerHandler 到子 Channel的 ChannelPipeline
-                    //当一个新的连接被接受时，一个新的子Channel将会被创建，
-                    // 而 ChannelInitializer 将会把一个你的EchoServerHandler 的实例添加到该 Channel 的 ChannelPipeline 中
+                    //当一个新的连接被接受时，一个新的子Channel将会被创建，而 ChannelInitializer 将会把一个你的EchoServerHandler 的实例添加到该 Channel 的 ChannelPipeline 中
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) {
@@ -57,5 +52,9 @@ public class EchoServer {
             //8、关闭 EventLoopGroup 释放所有的资源
             group.shutdownGracefully().sync();
         }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        new EchoServer(9999).start();
     }
 }
