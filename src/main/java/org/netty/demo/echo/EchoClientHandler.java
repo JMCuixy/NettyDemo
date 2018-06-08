@@ -1,6 +1,5 @@
 package org.netty.demo.echo;
 
-import com.sun.org.apache.xpath.internal.operations.String;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -11,6 +10,7 @@ import io.netty.util.CharsetUtil;
 
 /**
  * Created by XiuYin.Cui on 2018/6/6.
+ * SimpleChannelInboundHandler<T>，其中 T 是你要处理的消息的 Java 类型
  */
 @ChannelHandler.Sharable //标记该类的实例可以被多个Channel共享
 public class EchoClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
@@ -35,7 +35,7 @@ public class EchoClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
      * @throws Exception
      */
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext ctx)  {
         ctx.writeAndFlush(Unpooled.copiedBuffer("Netty rock!", CharsetUtil.UTF_8));
     }
 
@@ -52,4 +52,5 @@ public class EchoClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         cause.printStackTrace();
         ctx.close();
     }
+
 }

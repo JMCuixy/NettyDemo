@@ -24,10 +24,12 @@ public class EchoServerHandler extends ChannelHandlerAdapter {
      * @throws Exception
      */
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf in = (ByteBuf) msg;
         System.out.println("Server received：" + in.toString(CharsetUtil.UTF_8));
         //将接收到的消息写给发送者，而不冲刷出站消息
+        //ChannelHandlerContext 发送消息。导致消息向下一个ChannelHandler流动
+        //Channel 发送消息将会导致消息从 ChannelPipeline的尾端开始流动
         ctx.write(in);
     }
 

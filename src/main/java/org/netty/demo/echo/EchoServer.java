@@ -3,6 +3,7 @@ package org.netty.demo.echo;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -12,7 +13,8 @@ import java.net.InetSocketAddress;
 
 /**
  * Created by XiuYin.Cui on 2018/6/6.
- * 配置服务器的启动代码
+ * Netty 的引导类为应用程序的网络层配置提供了容器，这涉及将一个进程绑定到某个指定端口，
+ * 或者将一个进程连接到另一个运行在某个指定主机的指定端口上运行的线程
  */
 public class EchoServer {
 
@@ -29,7 +31,7 @@ public class EchoServer {
         try {
             //2、创建ServerBootstrap，引导和绑定服务器
             ServerBootstrap bootstrap = new ServerBootstrap();
-            bootstrap.group(group)
+            bootstrap.group(group, group)
                     //3、指定所使用的NIO传输Channel
                     .channel(NioServerSocketChannel.class)
                     //4、使用指定的端口设置套接字地址
@@ -39,7 +41,8 @@ public class EchoServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) {
-                            ch.pipeline().addLast(serverHandler);
+                            ChannelPipeline pipeline = ch.pipeline();
+                            pipeline.addLast(serverHandler);
                         }
                     });
             //6、异步地绑定服务器，调用sync()方法阻塞等待直到绑定完成
