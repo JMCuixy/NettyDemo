@@ -23,11 +23,7 @@ public class EchoServer {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        if (args.length !=1 ){
-            System.out.println("Usage：" + EchoServer.class.getSimpleName() + "<port>");
-        }
-        int port = Integer.parseInt(args[0]);
-        new EchoServer(port).start();
+        new EchoServer(9999).start();
     }
 
     public void start() throws InterruptedException {
@@ -53,6 +49,7 @@ public class EchoServer {
                     });
             //6、异步地绑定服务器，调用sync()方法阻塞等待直到绑定完成
             ChannelFuture channelFuture = bootstrap.bind().sync();
+            System.out.println(EchoServer.class.getName() + "started and listening for connections on" + channelFuture.channel().localAddress());
             //7、获取 Channel 的 CloseFuture，并且阻塞当前线程直到它完成
             channelFuture.channel().closeFuture().sync();
 

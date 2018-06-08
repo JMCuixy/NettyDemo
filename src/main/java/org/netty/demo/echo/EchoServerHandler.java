@@ -2,13 +2,9 @@ package org.netty.demo.echo;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerAdapter;
-import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.*;
 import io.netty.util.CharsetUtil;
 
-import java.nio.charset.Charset;
 
 /**
  * Created by XiuYin.Cui on 2018/6/6.
@@ -47,7 +43,6 @@ public class EchoServerHandler extends ChannelHandlerAdapter {
         //将这份暂存消息冲刷到远程节点，并且关闭该Channel
         ctx.writeAndFlush(Unpooled.EMPTY_BUFFER)
                 .addListener(ChannelFutureListener.CLOSE);
-        super.channelReadComplete(ctx);
     }
 
     /**
@@ -62,4 +57,5 @@ public class EchoServerHandler extends ChannelHandlerAdapter {
         cause.printStackTrace();
         ctx.close();
     }
+
 }
