@@ -5,6 +5,8 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.util.CharsetUtil;
 
+import java.nio.file.FileSystemNotFoundException;
+
 
 /**
  * Created by XiuYin.Cui on 2018/6/6.
@@ -30,7 +32,19 @@ public class EchoServerHandler extends ChannelHandlerAdapter {
         //将接收到的消息写给发送者，而不冲刷出站消息
         //ChannelHandlerContext 发送消息。导致消息向下一个ChannelHandler流动
         //Channel 发送消息将会导致消息从 ChannelPipeline的尾端开始流动
-        ctx.write(in);
+        ChannelFuture cf = ctx.write(in);
+        //添加监听器以便在写完成后接收通知
+        cf.addListener(new ChannelFutureListener() {
+            @Override
+            public void operationComplete(ChannelFuture future) throws Exception {
+                if (future.isSuccess()) {
+                    System.out.println("Write Successful");
+                } else {
+                    System.err.println("Write error");
+                    future.cause().printStackTrace();
+                }
+            }
+        });
     }
 
     /**
