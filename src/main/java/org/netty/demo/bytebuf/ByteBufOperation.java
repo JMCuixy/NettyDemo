@@ -69,7 +69,6 @@ public class ByteBufOperation {
 
         System.out.println("\r\n-----3--分割线--------");
         //3、写入数据
-        Random random = new Random();
         while (byteBuf.writableBytes() >= 4){
             byteBuf.writeByte(65);
         }
