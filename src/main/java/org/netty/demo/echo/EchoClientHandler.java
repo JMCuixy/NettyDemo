@@ -2,9 +2,7 @@ package org.netty.demo.echo;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.*;
 import io.netty.util.CharsetUtil;
 
 
@@ -35,13 +33,23 @@ public class EchoClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
      * @throws Exception
      */
     @Override
-    public void channelActive(ChannelHandlerContext ctx)  {
-        ctx.writeAndFlush(Unpooled.copiedBuffer("Netty rock!", CharsetUtil.UTF_8));
+    public void channelActive(ChannelHandlerContext ctx) {
+        ChannelFuture channelFuture = ctx.writeAndFlush(Unpooled.copiedBuffer("Netty rock!", CharsetUtil.UTF_8));
+        //出站异常处理
+        channelFuture.addListener(new ChannelFutureListener() {
+            @Override
+            public void operationComplete(ChannelFuture future) throws Exception {
+                if (!future.isSuccess()) {
+                    future.cause().printStackTrace();
+                    future.channel().close();
+                }
+            }
+        });
     }
 
 
     /**
-     * 在处理过程中引发异常时被调用
+     * 入站异常处理
      *
      * @param ctx
      * @param cause
@@ -50,7 +58,7 @@ public class EchoClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
-        ctx.close();
+        ctx.channel().close();
     }
 
 }
