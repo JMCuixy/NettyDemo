@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.util.CharsetUtil;
+import io.netty.util.ReferenceCountUtil;
 
 import java.nio.file.FileSystemNotFoundException;
 
@@ -14,7 +15,7 @@ import java.nio.file.FileSystemNotFoundException;
  * ChannelHandlerAdapter 提供了一些 channelInboundHandler 的默认实现
  */
 
-@ChannelHandler.Sharable //标识一个Channel-Handler 可以被多个Channel安全的共享
+@ChannelHandler.Sharable //表示可以被添加到多个 ChannelPipeline 中，标识一个Channel-Handler 可以被多个Channel安全的共享
 public class EchoServerHandler extends ChannelHandlerAdapter {
 
 
@@ -72,6 +73,23 @@ public class EchoServerHandler extends ChannelHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
         ctx.close();
+    }
+
+
+    /**
+     * 当请求通过Channel 将数据写到远程节点时被调用
+     * @param ctx
+     * @param msg
+     * @param promise
+     * @throws Exception
+     */
+    @Override
+    public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+
+        ReferenceCountUtil.release(msg);
+        //ChannelPromise 是ChannelFuture的一个子类，设置成 true 通知 ChannelFutureListener 消息已经被处理了
+        //当一个 Promise 被完成之后，其对应的 Future 的值便不能再进行任何修改了
+        promise.setSuccess();
     }
 
 }
