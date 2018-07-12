@@ -2,10 +2,7 @@ package org.netty.demo.echo;
 
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.*;
 import io.netty.channel.oio.OioEventLoopGroup;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.oio.OioDatagramChannel;
@@ -15,7 +12,8 @@ import org.slf4j.LoggerFactory;
 import java.net.InetSocketAddress;
 
 /**
- * Created by XiuYin.Cui on 2018/7/11.
+ * UDP 客户端会主动构造请求消息，向本网段内的所有主机请求消息，对于服务端而言
+ * 接收到广播消息之后向广播消息的发起方进行定点发送。
  */
 public class UDPClient {
 
@@ -31,6 +29,8 @@ public class UDPClient {
         Bootstrap bootstrap = new Bootstrap();
         // UDP协议使用OioEventLoopGroup
         bootstrap.group(new OioEventLoopGroup());
+        //允许广播
+        bootstrap.option(ChannelOption.SO_BROADCAST, true);
         // UDP协议使用OioDatagramChannel
         bootstrap.channel(OioDatagramChannel.class);
         bootstrap.handler(new SimpleChannelInboundHandler<DatagramPacket>() {
