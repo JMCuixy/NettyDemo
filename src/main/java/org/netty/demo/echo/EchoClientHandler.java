@@ -61,4 +61,15 @@ public class EchoClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         ctx.channel().close();
     }
 
+
+    @Override
+    public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+        ByteBuf buf = (ByteBuf) msg;
+        System.out.print("出站动作被调用:");
+        while (buf.isReadable()){
+            System.out.print((char) buf.readByte());
+        }
+
+        super.write(ctx, msg, promise);
+    }
 }
