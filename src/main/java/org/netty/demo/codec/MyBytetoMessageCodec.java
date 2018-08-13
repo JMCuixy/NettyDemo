@@ -14,7 +14,6 @@ public class MyBytetoMessageCodec extends ByteToMessageCodec {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
-
     }
 
     @Override

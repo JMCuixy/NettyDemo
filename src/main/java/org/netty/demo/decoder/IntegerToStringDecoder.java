@@ -11,15 +11,9 @@ import java.util.List;
  */
 public class IntegerToStringDecoder extends MessageToMessageEncoder<Integer> {
 
-
     /**
-     * 对于每个需要被解码为另一种格式的入站消息来说，该方法将会被调用。
-     * 解码消息随后会被传递给 ChannelPipeline 中的下一个 ChannelInboundHandler
-     *
-     * @param channelHandlerContext
-     * @param integer
-     * @param list
-     * @throws Exception
+     * 1、对于每个需要被解码为另一种格式的入站消息来说，该方法将会被调用。
+     * 2、解码消息随后会被传递给 ChannelPipeline 中的下一个 ChannelInboundHandler
      */
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Integer integer, List<Object> list) throws Exception {

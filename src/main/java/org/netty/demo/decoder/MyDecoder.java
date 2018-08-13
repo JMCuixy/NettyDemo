@@ -15,14 +15,9 @@ public class MyDecoder extends ByteToMessageDecoder {
     private static final int MAX_FRAME_SIZE = 1024;
 
     /**
-     * 该方法被调用时，将会传入一个包含了传入数据的 ByteBuf，以及一个用来添加解码消息的 List.
-     * 对该方法的调用将会重复进行，直到确定没有新的元素被添加到该 List，或者Butebuf 没有更多可读取的字节为止。
-     * List 的内容将会被传递给 ChannelPipeline 中的下一个 ChannelInboundHandler。
-     *
-     * @param channelHandlerContext
-     * @param byteBuf 传入数据
-     * @param list 解码后的消息元素被放入该List
-     * @throws Exception
+     * 1、该方法被调用时，将会传入一个包含了传入数据的 ByteBuf，以及一个用来添加解码消息的 List.
+     * 2、对该方法的调用将会重复进行，直到确定没有新的元素被添加到该 List，或者Butebuf 没有更多可读取的字节为止。
+     * 3、List 的内容将会被传递给 ChannelPipeline 中的下一个 ChannelInboundHandler。
      */
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
