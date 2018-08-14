@@ -16,11 +16,6 @@ public class WebSocketConvertHandler extends MessageToMessageCodec<WebSocketFram
      * 1、对于每个 OUTBOUND_IN 类型的消息，这个方法都会被调用。
      * 2、这个消息将会被编码为 INBOUND_IN 类型的消息。
      * 3、然后被转发给 ChannelPipeline 中的下一个 ChannelOutboundHandler
-     *
-     * @param ctx
-     * @param msg
-     * @param out
-     * @throws Exception
      */
     @Override
     protected void encode(ChannelHandlerContext ctx, MyWebSocketFrame msg, List<Object> out) throws Exception {
@@ -54,35 +49,25 @@ public class WebSocketConvertHandler extends MessageToMessageCodec<WebSocketFram
      * 1、传入 INBOUND_IN 类型的消息，该方法会被调用。
      * 2、这个消息会被解码为 OUTBOUND_IN 类型的消息。
      * 3、然后被转发给 ChannelPipeline 中的下一个 ChannelInboundHandler
-     *
-     * @param ctx
-     * @param msg
-     * @param out
-     * @throws Exception
      */
     @Override
     protected void decode(ChannelHandlerContext ctx, WebSocketFrame msg, List<Object> out) throws Exception {
         ByteBuf byteBuf = msg.content().duplicate().retain();
-        if (msg instanceof BinaryWebSocketFrame){
+        if (msg instanceof BinaryWebSocketFrame) {
             out.add(new MyWebSocketFrame(MyWebSocketFrame.FrameType.BINARY, byteBuf));
-        }else
-            if (msg instanceof CloseWebSocketFrame){
+        } else if (msg instanceof CloseWebSocketFrame) {
             out.add(new MyWebSocketFrame(MyWebSocketFrame.FrameType.CLOSE, byteBuf));
-        }else
-            if (msg instanceof TextWebSocketFrame){
+        } else if (msg instanceof TextWebSocketFrame) {
             out.add(new MyWebSocketFrame(MyWebSocketFrame.FrameType.TEXT, byteBuf));
-        }else
-            if (msg instanceof PingWebSocketFrame){
+        } else if (msg instanceof PingWebSocketFrame) {
             out.add(new MyWebSocketFrame(MyWebSocketFrame.FrameType.PING, byteBuf));
-        }else
-            if (msg instanceof PongWebSocketFrame){
+        } else if (msg instanceof PongWebSocketFrame) {
             out.add(new MyWebSocketFrame(MyWebSocketFrame.FrameType.PONG, byteBuf));
-        }else
-            if (msg instanceof ContinuationWebSocketFrame){
+        } else if (msg instanceof ContinuationWebSocketFrame) {
             out.add(new MyWebSocketFrame(MyWebSocketFrame.FrameType.CONTINUATION, byteBuf));
-            }else {
+        } else {
             throw new IllegalStateException("Unsupported websocket msg " + msg);
-            }
+        }
 
     }
 
