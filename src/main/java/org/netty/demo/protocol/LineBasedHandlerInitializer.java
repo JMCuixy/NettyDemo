@@ -17,10 +17,10 @@ public class LineBasedHandlerInitializer extends ChannelInitializer<Channel> {
         ch.pipeline().addLast(
                 // 将提取到的桢转发给下一个Channelhandler
                 new LineBasedFrameDecoder(64 * 1024),
+                // 添加 FrameHandler 以接收帧
                 new FrameHandler()
         );
     }
-
 
     public static final class FrameHandler extends SimpleChannelInboundHandler<ByteBuf> {
 

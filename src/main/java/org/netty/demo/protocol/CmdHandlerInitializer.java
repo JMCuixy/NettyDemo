@@ -8,7 +8,9 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.LineBasedFrameDecoder;
 
 /**
- * Created by XiuYin.Cui on 2018/8/26.
+ * 传入数据流是一系列的帧，每个帧都由换行符（\n）分隔；
+ * 每个帧都由一系列的元素组成，每个元素都由单个空格字符分隔；
+ * 一个帧的内容代表一个命令，定义为一个命令名称后跟着数目可变的参数。
  */
 public class CmdHandlerInitializer extends ChannelInitializer<Channel> {
 
@@ -25,7 +27,9 @@ public class CmdHandlerInitializer extends ChannelInitializer<Channel> {
      * Cmd POJO
      */
     public static final class Cmd {
+        // 表示命令
         private final ByteBuf name;
+        //表示可变的参数
         private final ByteBuf args;
 
         public Cmd(ByteBuf name, ByteBuf args) {

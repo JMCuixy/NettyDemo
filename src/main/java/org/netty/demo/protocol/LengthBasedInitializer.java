@@ -12,7 +12,6 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
  */
 public class LengthBasedInitializer extends ChannelInitializer<Channel> {
 
-
     @Override
     protected void initChannel(Channel ch) throws Exception {
         ch.pipeline().addLast(
