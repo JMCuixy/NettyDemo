@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 public class ScheduleExecutor {
 
     public static void main(String[] args) throws InterruptedException {
+        // 创建一个线程池，数量10
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         executorService.schedule(new Runnable() {
             @Override
@@ -18,6 +19,7 @@ public class ScheduleExecutor {
             }
         }, 10, TimeUnit.SECONDS);
         Thread.sleep(15000);
+        // 关闭 ScheduledExecutorService ，释放资源
         executorService.shutdown();
     }
 

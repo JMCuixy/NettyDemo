@@ -15,6 +15,7 @@ public class FileRegionHandler extends ChannelHandlerAdapter {
      * 这个示例只适用于文件内容的直接传输，不包括应用程序对数据的任何处理。在需要将数据
      * 从文件系统复制到用户内存中时，可以使用 ChunkedWriteHandler， 它支持异步写大型数据
      * 流，而又不会导致大量的内存消耗
+     *
      * @param ctx
      * @param msg
      * @throws Exception
@@ -27,15 +28,6 @@ public class FileRegionHandler extends ChannelHandlerAdapter {
         //以该文件的完整长度创建一个新的 DefaultFileRegion
         DefaultFileRegion defaultFileRegion = new DefaultFileRegion(channel, 0, file.length());
         //发送该 DefaultFileRegion， 并注册一个 ChannelFutureListener
-        ctx.writeAndFlush(defaultFileRegion).addListener(
-                new ChannelFutureListener() {
-                    @Override
-                    public void operationComplete(ChannelFuture future) throws Exception {
-                        if (!future.isSuccess()) {
-                            Throwable cause = future.cause();
-                        }
-                    }
-                }
-        );
+        ctx.writeAndFlush(defaultFileRegion).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
     }
 }

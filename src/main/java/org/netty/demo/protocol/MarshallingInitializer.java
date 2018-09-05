@@ -23,7 +23,6 @@ public class MarshallingInitializer extends ChannelInitializer<Channel> {
         this.unmarshallerProvider = unmarshallerProvider;
     }
 
-
     @Override
     protected void initChannel(Channel ch) throws Exception {
         ch.pipeline().addLast(
@@ -34,10 +33,7 @@ public class MarshallingInitializer extends ChannelInitializer<Channel> {
     }
 
     public static final class ObjectHandler extends SimpleChannelInboundHandler<Serializable> {
-
         @Override
-        protected void messageReceived(ChannelHandlerContext ctx, Serializable msg) throws Exception {
-
-        }
+        protected void messageReceived(ChannelHandlerContext ctx, Serializable msg) throws Exception { }
     }
 }
