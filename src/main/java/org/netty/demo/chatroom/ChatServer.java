@@ -51,7 +51,6 @@ public class ChatServer {
             }
         });
         channelFuture.channel().closeFuture().syncUninterruptibly();
-
     }
 
 }
