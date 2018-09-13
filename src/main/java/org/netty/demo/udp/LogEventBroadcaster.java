@@ -11,8 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 /**
  * Created by XiuYin.Cui on 2018/9/10.
@@ -21,7 +19,6 @@ public class LogEventBroadcaster {
     private final EventLoopGroup group;
     private final Bootstrap bootstrap;
     private final File file;
-
 
     public LogEventBroadcaster(InetSocketAddress address, File file) {
         group = new NioEventLoopGroup();
@@ -35,12 +32,11 @@ public class LogEventBroadcaster {
         this.file = file;
     }
 
-
     public void run() throws InterruptedException, IOException {
         //绑定 Channel，UDP 协议的连接用 bind() 方法
         Channel channel = bootstrap.bind(0).sync().channel();
         long pointer = 0;
-        //长轮询
+        //长轮询 监听是否有新的日志文件生成
         while (true) {
             long length = file.length();
             if (length < pointer) {
@@ -52,8 +48,8 @@ public class LogEventBroadcaster {
                 raf.seek(pointer);
                 String line;
                 while ((line = raf.readLine()) != null) {
-                    //对于每个日志条目，写入一个 LogEvent 到 Channel 中
-                    channel.writeAndFlush(new LogEvent(file.getAbsolutePath(), line));
+                    //对于每个日志条目，写入一个 LogEvent 到 Channel 中，最后加入一个换行符号
+                    channel.writeAndFlush(new LogEvent(file.getAbsolutePath(), line + System.getProperty("line.separator")));
                 }
                 pointer = raf.getFilePointer();
                 raf.close();
@@ -73,19 +69,14 @@ public class LogEventBroadcaster {
         group.shutdownGracefully();
     }
 
-    public static void main(String[] args) throws URISyntaxException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         InetSocketAddress socketAddress = new InetSocketAddress("255.255.255.255", 8888);
         File file = new File("E:\\2018-09-12.log");
         LogEventBroadcaster logEventBroadcaster = new LogEventBroadcaster(socketAddress, file);
         try {
             logEventBroadcaster.run();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             logEventBroadcaster.stop();
         }
     }
-
 }

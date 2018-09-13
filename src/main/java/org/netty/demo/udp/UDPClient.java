@@ -14,7 +14,7 @@ public class UDPClient {
             client = new DatagramSocket();
             //创建数据报
             byte[] buffer = "hello,world".getBytes();
-            InetAddress byName = InetAddress.getByName("192.168.1.22");
+            InetAddress byName = InetAddress.getByName("255.255.255.255");
             //建立将要传输的UDP包，并指定ip地址和端口号
             DatagramPacket datagramPacket = new DatagramPacket(buffer, buffer.length, byName, 8088);
             client.send(datagramPacket);

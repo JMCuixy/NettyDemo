@@ -19,6 +19,7 @@ public class LogEvent {
      * 消息内容
      */
     private final String msg;
+
     private final long received;
 
     /**
